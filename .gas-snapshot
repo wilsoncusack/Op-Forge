@@ -1,0 +1,4 @@
+OpStackStdTest:testCreatesContractOnL2() (gas: 292621)
+OpStackStdTest:testParseOpaqueData(uint256,uint256,uint64,bool,bytes) (runs: 256, μ: 28449, ~: 22862)
+OpStackStdTest:testRelaysContractCallOnL2() (gas: 213376)
+OpStackStdTest:testSendEthOnL2() (gas: 98225)

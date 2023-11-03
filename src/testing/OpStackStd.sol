@@ -35,10 +35,11 @@ library OpStackStd {
         vm.startPrank(depositTx.from);
         if (depositTx.to == address(0)) {
             address newContract;
+            uint256 value = depositTx.value;
             bytes memory bytecode = depositTx.data;
             // TODO(Wilson): How can we limit the gas here?
             assembly {
-                newContract := create(0, add(bytecode, 0x20), mload(bytecode))
+                newContract := create(value, add(bytecode, 0x20), mload(bytecode))
             }
 
             if (newContract == address(0)) {

@@ -1,66 +1,31 @@
-## Foundry
+### Op-Forge 
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Tools for using forge with OpStack chains. 
 
-Foundry consists of:
+#### OPStackStd - Testing Tools 
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+##### relayDepositTransaction 
+A helper method for creating an L2 transactions from the L1 event logs, just as the Op-Node does. 
 
-## Documentation
+```solidity
+import {OpStackStd} from "Op-Forge/OpStackStd.sol";
 
-https://book.getfoundry.sh/
+function testSendEthOnL2() public {
+    address bob = address(0xb0b);
+    // pre check
+    vm.selectFork(opStackFork);
+    assertEq(bob.balance, 0);
+    
+    vm.selectFork(l1Fork);
+    uint256 value = 1e18;
+    vm.deal(address(this), value);
+    vm.recordLogs();
+    portal.depositTransaction{value: value}({_to: bob, _value: value, _gasLimit: 21_000, _isCreation: false, _data: ""});
+    VmSafe.Log[] memory logs = vm.getRecordedLogs();
+    OpStackStd.relayDepositTransaction(logs, opStackFork);
 
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+    // post check
+    vm.selectFork(opStackFork);
+    assertEq(bob.balance, value);
+}
 ```

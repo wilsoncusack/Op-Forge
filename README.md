@@ -8,7 +8,7 @@ Tools for using forge with OpStack chains.
 A helper method for creating an L2 transactions from the L1 event logs, just as the Op-Node does. 
 
 ```solidity
-import {OpStackStd} from "Op-Forge/OpStackStd.sol";
+import {OpStackStd} from "Op-Forge/testing/OpStackStd.sol";
 
 function testSendEthOnL2() public {
     address bob = address(0xb0b);
